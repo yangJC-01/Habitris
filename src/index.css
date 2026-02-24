@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Habitris 디자인 톤 — 미니멀, 테트리스 블록 색 */
+:root {
+  --habitris-bg: #0f0f12;
+  --habitris-surface: #1a1a1f;
+  --habitris-text: #e8e8ec;
+  --habitris-muted: #888899;
+  --habitris-border: #2a2a32;
+  --habitris-accent: #6ee7b7;
+
+  /* 테트리스 블록 색 (습관 ↔ 블록 매핑용) */
+  --block-i: #00f0f0;
+  --block-o: #f0f000;
+  --block-t: #a000f0;
+  --block-s: #00f000;
+  --block-z: #f00000;
+  --block-j: #0000f0;
+  --block-l: #f0a000;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--habitris-bg);
+  color: var(--habitris-text);
+  font-family: system-ui, -apple-system, sans-serif;
+}

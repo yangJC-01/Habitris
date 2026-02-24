@@ -1,0 +1,11 @@
+---
+description: Habitris 프로젝트 공통 컨벤션
+alwaysApply: true
+---
+
+# Habitris 공통 컨벤션
+
+- **기획서**: docs/PROJECT_SPEC.md 기준으로 기능·플랫폼·수익 모델 일치시키기
+- **플랫폼 순서**: 1차 PC 앱 → 2차 모바일(Play Store)
+- **용어**: 습관 완료 → 블록 쌓기, 줄 완성 → Castle 기록. 문서·코드에서 용어 통일
+- **Cursor 가이드**: Rules/Skills/Subagent/Hooks/익스텐션 사용법은 docs/CURSOR_GUIDE.md 참고

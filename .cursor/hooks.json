@@ -1,0 +1,4 @@
+{
+  "//": "Habitris 프로젝트 훅. 필요 시 preToolUse, postToolUse, sessionStart 등에 스크립트 경로 추가.",
+  "hooks": []
+}
