@@ -3,7 +3,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useTetris } from '@/hooks/useTetris'
 import { MainPage } from '@/pages/MainPage'
 import { CastlePageRoute } from '@/pages/CastlePageRoute'
-import { Toast, DataBackupModal } from '@/components/common'
+import { PrivacyPage } from '@/pages/PrivacyPage'
+import { TermsPage } from '@/pages/TermsPage'
+import { ContactPage } from '@/pages/ContactPage'
+import { AboutPage } from '@/pages/AboutPage'
+import { Toast, DataBackupModal, Footer } from '@/components/common'
 
 export default function App() {
   const [toast, setToast] = useState<string | null>(null)
@@ -40,7 +44,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-2xl px-4 py-6 min-w-0 overflow-x-hidden">
+      <main className="mx-auto flex min-h-[calc(100vh-8rem)] min-w-0 max-w-6xl flex-col overflow-x-hidden px-4 py-6">
         <BrowserRouter>
           <Routes>
             <Route
@@ -64,9 +68,15 @@ export default function App() {
               path="/castle"
               element={<CastlePageRoute lines={tetris.castle} />}
             />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/about" element={<AboutPage />} />
           </Routes>
         </BrowserRouter>
       </main>
+
+      <Footer />
 
       {toast && (
         <Toast message={toast} onDismiss={() => setToast(null)} />
