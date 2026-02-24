@@ -1,4 +1,5 @@
 export { Toast } from './Toast'
+export { ErrorBoundary } from './ErrorBoundary'
 export { AdSlot } from './AdSlot'
 export { DataBackupModal } from './DataBackupModal'
 export { Footer } from './Footer'

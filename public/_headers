@@ -1,0 +1,5 @@
+# 루트(SPA 진입점) 캐시 방지 — 배포 후 빈 화면 방지
+/
+  Cache-Control: no-cache, no-store, must-revalidate
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
