@@ -21,6 +21,7 @@ interface TetrisBoardProps {
   lineClearFlash?: boolean
   onMoveLeft: () => void
   onMoveRight: () => void
+  onMoveDown: () => void
   onRotate: () => void
   onDrop: () => void
   onSpawn: (blockType: TetrisBlockType) => void
@@ -32,6 +33,7 @@ export function TetrisBoard({
   lineClearFlash,
   onMoveLeft,
   onMoveRight,
+  onMoveDown,
   onRotate,
   onDrop,
   onSpawn,
@@ -51,6 +53,10 @@ export function TetrisBoard({
           e.preventDefault()
           onMoveRight()
           break
+        case 'ArrowDown':
+          e.preventDefault()
+          onMoveDown()
+          break
         case 'ArrowUp':
           e.preventDefault()
           onRotate()
@@ -65,7 +71,7 @@ export function TetrisBoard({
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [currentPiece, onMoveLeft, onMoveRight, onRotate, onDrop])
+  }, [currentPiece, onMoveLeft, onMoveRight, onMoveDown, onRotate, onDrop])
 
   return (
     <div className="flex flex-col items-center gap-3 max-w-full overflow-x-auto">
@@ -73,7 +79,6 @@ export function TetrisBoard({
         className={`relative flex-shrink-0 rounded border-2 border-habitris-border bg-habitris-surface transition-shadow ${lineClearFlash ? 'line-clear-flash' : ''}`}
         style={{ width: width + 4, height: height + 4 }}
       >
-        {/* 그리드 */}
         <div
           className="absolute inset-0 grid gap-px p-px"
           style={{
@@ -98,7 +103,6 @@ export function TetrisBoard({
             ))
           )}
         </div>
-        {/* 현재 피스 오버레이 */}
         {currentPiece &&
           currentPiece.shape.map(([dr, dc], i) => {
             const r = currentPiece.row + dr
@@ -120,39 +124,14 @@ export function TetrisBoard({
           })}
       </div>
 
-      {/* 조작 버튼 */}
       <div className="flex flex-wrap items-center justify-center gap-2">
-        <button
-          type="button"
-          onClick={onMoveLeft}
-          className="rounded bg-habitris-surface px-3 py-1.5 text-sm text-habitris-text border border-habitris-border hover:border-habitris-accent"
-        >
-          ←
-        </button>
-        <button
-          type="button"
-          onClick={onMoveRight}
-          className="rounded bg-habitris-surface px-3 py-1.5 text-sm text-habitris-text border border-habitris-border hover:border-habitris-accent"
-        >
-          →
-        </button>
-        <button
-          type="button"
-          onClick={onRotate}
-          className="rounded bg-habitris-surface px-3 py-1.5 text-sm text-habitris-text border border-habitris-border hover:border-habitris-accent"
-        >
-          ↻
-        </button>
-        <button
-          type="button"
-          onClick={onDrop}
-          className="rounded bg-habitris-accent px-3 py-1.5 text-sm text-habitris-bg font-medium"
-        >
-          낙하
-        </button>
+        <button type="button" onClick={onMoveLeft} className="rounded bg-habitris-surface px-3 py-1.5 text-sm text-habitris-text border border-habitris-border hover:border-habitris-accent">←</button>
+        <button type="button" onClick={onMoveDown} className="rounded bg-habitris-surface px-3 py-1.5 text-sm text-habitris-text border border-habitris-border hover:border-habitris-accent">↓</button>
+        <button type="button" onClick={onMoveRight} className="rounded bg-habitris-surface px-3 py-1.5 text-sm text-habitris-text border border-habitris-border hover:border-habitris-accent">→</button>
+        <button type="button" onClick={onRotate} className="rounded bg-habitris-surface px-3 py-1.5 text-sm text-habitris-text border border-habitris-border hover:border-habitris-accent">↻</button>
+        <button type="button" onClick={onDrop} className="rounded bg-habitris-accent px-3 py-1.5 text-sm text-habitris-bg font-medium">낙하</button>
       </div>
 
-      {/* 직접 배치: 블록 선택 */}
       <div className="flex flex-wrap justify-center gap-1">
         <span className="w-full text-center text-xs text-habitris-muted">직접 배치</span>
         {TETRIS_BLOCK_TYPES.map((t) => (

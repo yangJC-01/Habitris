@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { CastlePage } from '@/components/CastlePage'
+import { CastlePage } from '@/components/castle'
+import { AdSlot } from '@/components/common'
 import type { CastleLine } from '@/types/tetris'
 
 interface CastlePageRouteProps {
@@ -22,6 +23,9 @@ export function CastlePageRoute({ lines }: CastlePageRouteProps) {
         </Link>
       </div>
       <CastlePage lines={lines} />
+      <div className="mt-6">
+        <AdSlot />
+      </div>
     </>
   )
 }

@@ -42,13 +42,20 @@ GitHub 저장소를 Cloudflare Pages에 연결하면 **브랜치에 푸시할 �
 
 ### 2.4 환경 변수 (선택)
 
-빌드 시 Node 버전이 맞지 않아 실패하면:
+**Node 버전** (빌드 실패 시):
 
 1. **Settings** → **Environment variables**
 2. **Add variable** (Production)
    - Variable name: `NODE_VERSION`
    - Value: `20`
 3. 저장 후 **Retry deployment** 또는 다시 푸시
+
+**광고(AdSense)** (M4):
+
+- 광고를 켜려면 빌드 시 다음 변수를 넣는다.
+- `VITE_ADSENSE_CLIENT`: AdSense 클라이언트 ID (예: `ca-pub-xxxxxxxx`)
+- `VITE_ADSENSE_SLOT`: (선택) 광고 슬롯 ID. 비우면 자동 형식만 사용.
+- 미설정 시 광고 영역은 "광고 영역" 플레이스홀더만 표시되며, 사용성은 동일하다.
 
 ### 2.5 저장 후 배포
 
@@ -66,14 +73,22 @@ GitHub 저장소를 Cloudflare Pages에 연결하면 **브랜치에 푸시할 �
 
 ---
 
-## 4. 이 프로젝트에서 해 둔 설정
+## 4. 광고 노출 위치
 
-- **`public/_redirects`**: SPA(React Router 등) 사용 시 모든 경로를 `index.html`로 넘기도록 설정해 두었다. Cloudflare Pages가 이 파일을 읽어 리다이렉트 규칙으로 적용한다.
+- **메인 페이지**: 테트리스 보드 **아래** (플레이 영역 밖).
+- **Castle 페이지**: Castle 목록 **아래**.
+- 메인 플레이 영역(습관 목록·테트리스 그리드) 위에는 배치하지 않는다.
+
+---
+
+## 5. 이 프로젝트에서 해 둔 설정
+
+- **`public/_redirects`**: SPA(React Router 등) 사용 시 모든 경로를 `index.html`로 넘기도록 설정해 두었다.
 - **빌드**: `npm run build` → 결과물이 `dist/`에 나오며, Vite가 `public/` 내용을 `dist/`로 복사하므로 `_redirects`도 함께 포함된다.
 
 ---
 
-## 5. 문제 해결
+## 6. 문제 해결
 
 | 증상 | 확인·조치 |
 |------|-----------|

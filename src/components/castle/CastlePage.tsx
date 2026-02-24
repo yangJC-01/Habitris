@@ -61,10 +61,7 @@ export function CastlePage({ lines }: CastlePageProps) {
             key={`${line.completedAt}-${index}`}
             className={`flex items-center gap-2 rounded border border-habitris-border/50 bg-habitris-bg/50 px-2 py-1 ${animateIndex === index ? 'castle-line-new' : ''}`}
           >
-            <div
-              className="flex gap-0.5"
-              style={{ width: GRID_COLS * CELL_SIZE }}
-            >
+            <div className="flex gap-0.5" style={{ width: GRID_COLS * CELL_SIZE }}>
               {line.cells.map((cell, c) => (
                 <div
                   key={c}

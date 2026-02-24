@@ -3,8 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useTetris } from '@/hooks/useTetris'
 import { MainPage } from '@/pages/MainPage'
 import { CastlePageRoute } from '@/pages/CastlePageRoute'
-import { Toast } from '@/components/Toast'
-import { DataBackupModal } from '@/components/DataBackupModal'
+import { Toast, DataBackupModal } from '@/components/common'
 
 export default function App() {
   const [toast, setToast] = useState<string | null>(null)
@@ -54,6 +53,7 @@ export default function App() {
                   addPieceFromHabit={tetris.addPieceFromHabit}
                   moveLeft={() => tetris.moveCurrent(-1)}
                   moveRight={() => tetris.moveCurrent(1)}
+                  moveDown={tetris.moveDownCurrent}
                   rotate={tetris.rotateCurrent}
                   drop={tetris.dropCurrent}
                   spawnPiece={tetris.spawnPiece}

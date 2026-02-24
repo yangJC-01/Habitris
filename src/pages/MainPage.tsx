@@ -2,10 +2,9 @@ import { useState } from 'react'
 import type { Habit } from '@/types/habit'
 import type { Grid, CurrentPiece } from '@/types/tetris'
 import { useHabits } from '@/hooks/useHabits'
-import { HabitList } from '@/components/HabitList'
-import { HabitForm } from '@/components/HabitForm'
-import { HabitEditModal } from '@/components/HabitEditModal'
-import { TetrisBoard } from '@/components/TetrisBoard'
+import { HabitList, HabitForm, HabitEditModal } from '@/components/habit'
+import { TetrisBoard } from '@/components/tetris'
+import { AdSlot } from '@/components/common'
 import { Link } from 'react-router-dom'
 
 interface MainPageProps {
@@ -15,6 +14,7 @@ interface MainPageProps {
   addPieceFromHabit: (blockType: Habit['blockType']) => void
   moveLeft: () => void
   moveRight: () => void
+  moveDown: () => void
   rotate: () => void
   drop: () => void
   spawnPiece: (blockType: Habit['blockType']) => void
@@ -27,6 +27,7 @@ export function MainPage({
   addPieceFromHabit,
   moveLeft,
   moveRight,
+  moveDown,
   rotate,
   drop,
   spawnPiece,
@@ -92,10 +93,15 @@ export function MainPage({
           lineClearFlash={lineClearFlash}
           onMoveLeft={moveLeft}
           onMoveRight={moveRight}
+          onMoveDown={moveDown}
           onRotate={rotate}
           onDrop={drop}
           onSpawn={spawnPiece}
         />
+      </div>
+
+      <div className="mt-6">
+        <AdSlot />
       </div>
 
       {editingHabit && (

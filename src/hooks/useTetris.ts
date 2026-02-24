@@ -3,7 +3,7 @@ import type { TetrisBlockType } from '@/types/habit'
 import type { Grid, CastleLine, CurrentPiece } from '@/types/tetris'
 import { GRID_COLS, GRID_ROWS } from '@/types/tetris'
 import { loadGrid, saveGrid, loadCastle, saveCastle } from '@/lib/storage'
-import { TETROMINO_SHAPES } from '@/lib/tetrominoShapes'
+import { TETROMINO_SHAPES } from '@/lib/tetris'
 import { TETRIS_BLOCK_TYPES } from '@/lib/blockTypes'
 
 function emptyGrid(): Grid {
@@ -124,6 +124,52 @@ function removeRows(grid: Grid, rows: number[]): { grid: Grid; removedLines: Tet
   return { grid: [...emptyRows, ...kept], removedLines }
 }
 
+interface PlacementCandidate {
+  grid: Grid
+  removedLines: TetrisBlockType[][]
+  rotationIndex: number
+  col: number
+}
+
+function evaluatePlacement(
+  grid: Grid,
+  blockType: TetrisBlockType,
+  rotationIndex: number,
+  shape: readonly [number, number][],
+  col: number
+): PlacementCandidate | null {
+  const row = findDropRow(grid, blockType, shape, col)
+  // 유효한 위치가 없으면 스킵
+  if (row < 0 || !canPlace(grid, blockType, shape, row, col)) return null
+
+  const placed = mergePiece(grid, blockType, shape, row, col)
+  const full = getFullRows(placed)
+  const { grid: after, removedLines } =
+    full.length > 0 ? removeRows(placed, full) : { grid: placed, removedLines: [] }
+
+  // 간단한 평가 지표: 줄 개수, 전체 높이, 구멍 수
+  let aggregateHeight = 0
+  let holes = 0
+  for (let c = 0; c < GRID_COLS; c++) {
+    let seenBlock = false
+    for (let r = 0; r < GRID_ROWS; r++) {
+      const cell = after[r][c]
+      if (cell) {
+        if (!seenBlock) {
+          aggregateHeight += GRID_ROWS - r
+          seenBlock = true
+        }
+      } else if (seenBlock) {
+        holes++
+      }
+    }
+  }
+
+  ;(after as any)._score = { lines: full.length, aggregateHeight, holes }
+
+  return { grid: after, removedLines, rotationIndex, col }
+}
+
 export interface UseTetrisOptions {
   onLinesCleared?: (count: number) => void
 }
@@ -158,18 +204,61 @@ export function useTetris(options?: UseTetrisOptions) {
   const addPieceFromHabit = useCallback(
     (blockType: TetrisBlockType) => {
       const rotations = TETROMINO_SHAPES[blockType]
-      const shape = rotations[0]
-      const spawnCol = Math.floor((GRID_COLS - 4) / 2)
-      const row = findDropRow(grid, blockType, shape, spawnCol)
-      let nextGrid = mergePiece(grid, blockType, shape, row, spawnCol)
-      const full = getFullRows(nextGrid)
-      if (full.length > 0) {
-        const { grid: after, removedLines } = removeRows(nextGrid, full)
-        nextGrid = after
-        addClearedLinesToCastle(removedLines)
-        onLinesCleared?.(full.length)
+      let best: PlacementCandidate | null = null
+      let bestScore:
+        | {
+            lines: number
+            aggregateHeight: number
+            holes: number
+          }
+        | null = null
+
+      for (let ri = 0; ri < rotations.length; ri++) {
+        const shape = rotations[ri]
+        for (let col = 0; col < GRID_COLS; col++) {
+          const candidate = evaluatePlacement(grid, blockType, ri, shape, col)
+          if (!candidate) continue
+
+          const score = (candidate.grid as any)._score as {
+            lines: number
+            aggregateHeight: number
+            holes: number
+          }
+
+          if (!best || !bestScore) {
+            best = candidate
+            bestScore = score
+          } else {
+            // 우선순위: 줄 많이 → 높이 낮게 → 구멍 적게
+            if (score.lines > bestScore.lines) {
+              best = candidate
+              bestScore = score
+            } else if (score.lines === bestScore.lines) {
+              if (score.aggregateHeight < bestScore.aggregateHeight) {
+                best = candidate
+                bestScore = score
+              } else if (
+                score.aggregateHeight === bestScore.aggregateHeight &&
+                score.holes < bestScore.holes
+              ) {
+                best = candidate
+                bestScore = score
+              }
+            }
+          }
+        }
       }
-      setGrid(nextGrid)
+
+      if (!best) {
+        // 더 이상 놓을 곳이 없으면 아무 것도 하지 않음
+        return
+      }
+
+      setGrid(best.grid)
+      if (best.removedLines.length > 0) {
+        addClearedLinesToCastle(best.removedLines)
+        onLinesCleared?.(best.removedLines.length)
+      }
     },
     [grid, addClearedLinesToCastle, onLinesCleared]
   )
@@ -213,6 +302,18 @@ export function useTetris(options?: UseTetrisOptions) {
     setGrid(nextGrid)
   }, [grid, currentPiece, addClearedLinesToCastle, onLinesCleared])
 
+  /** 현재 피스를 한 칸 아래로 (막히면 낙하 처리) */
+  const moveDownCurrent = useCallback(() => {
+    if (!currentPiece) return
+    const { blockType, shape, row, col } = currentPiece
+    const newRow = row + 1
+    if (canPlace(grid, blockType, shape, newRow, col)) {
+      setCurrentPiece({ ...currentPiece, row: newRow })
+    } else {
+      dropCurrent()
+    }
+  }, [grid, currentPiece, dropCurrent])
+
   /** 직접 조작: 새 피스 스폰 (블록 타입 선택) */
   const spawnPiece = useCallback((blockType: TetrisBlockType) => {
     const rotations = TETROMINO_SHAPES[blockType]
@@ -230,6 +331,7 @@ export function useTetris(options?: UseTetrisOptions) {
     moveCurrent,
     rotateCurrent,
     dropCurrent,
+    moveDownCurrent,
     spawnPiece,
   }
 }
