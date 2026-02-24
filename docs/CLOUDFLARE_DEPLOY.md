@@ -92,6 +92,7 @@ GitHub 저장소를 Cloudflare Pages에 연결하면 **브랜치에 푸시할 �
 
 | 증상 | 확인·조치 |
 |------|-----------|
+| **빈 화면(아무것도 안 보임)** | **Build output directory**가 반드시 `dist`인지 확인. Cloudflare 대시보드 → 해당 프로젝트 → **Settings** → **Builds & deployments** → **Build configuration** → **Build output directory** = `dist`로 설정 후 **Save** → **Deployments**에서 **Retry deployment** 또는 새 푸시로 재배포. (또는 Root directory가 비어 있고, 출력 디렉터리가 `dist`인지 확인.) |
 | 빌드 실패 (Node 버전) | Environment variables에 `NODE_VERSION=20` 추가 후 재배포 |
 | 404 (직접 URL 접속) | `public/_redirects`에 `/* /index.html 200` 있는지 확인, 재빌드 |
 | GitHub 연결 안 됨 | Cloudflare에서 GitHub 앱 권한 확인, 저장소 접근 허용 여부 확인 |
