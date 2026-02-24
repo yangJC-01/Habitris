@@ -1,0 +1,2 @@
+# SPA fallback: 모든 경로를 index.html로 (React Router 등 사용 시)
+/*    /index.html   200

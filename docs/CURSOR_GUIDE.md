@@ -25,7 +25,9 @@ Habitris/
 ├── LICENSE             # MIT License
 ├── docs/
 │   ├── PROJECT_SPEC.md
-│   └── CURSOR_GUIDE.md  # 이 파일
+│   ├── PLAN.md
+│   ├── CURSOR_GUIDE.md  # 이 파일
+│   └── CLOUDFLARE_DEPLOY.md  # Cloudflare Pages Git 연결·배포
 └── ...
 ```
 
