@@ -30,20 +30,20 @@ export default function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-habitris-bg text-habitris-text">
         <header className="border-b border-habitris-border px-4 py-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-xl font-semibold tracking-tight">Habitris</h1>
-            <p className="text-sm text-habitris-muted">습관을 완료하면 테트리스 블록이 쌓여요</p>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h1 className="text-xl font-semibold tracking-tight">Habitris</h1>
+              <p className="text-sm text-habitris-muted">습관을 완료하면 테트리스 블록이 쌓여요</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setDataModalOpen(true)}
+              className="shrink-0 rounded border border-habitris-border px-3 py-1.5 text-xs text-habitris-muted hover:border-habitris-accent hover:text-habitris-text"
+            >
+              데이터
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => setDataModalOpen(true)}
-            className="shrink-0 rounded border border-habitris-border px-3 py-1.5 text-xs text-habitris-muted hover:border-habitris-accent hover:text-habitris-text"
-          >
-            데이터
-          </button>
-        </div>
-      </header>
+        </header>
 
         <main className="mx-auto flex min-h-[calc(100vh-8rem)] min-w-0 max-w-6xl flex-col overflow-x-hidden px-4 py-6">
           <Routes>
