@@ -27,8 +27,9 @@ export default function App() {
   const tetris = useTetris({ onLinesCleared: handleLinesCleared })
 
   return (
-    <div className="min-h-screen bg-habitris-bg text-habitris-text">
-      <header className="border-b border-habitris-border px-4 py-4">
+    <BrowserRouter>
+      <div className="min-h-screen bg-habitris-bg text-habitris-text">
+        <header className="border-b border-habitris-border px-4 py-4">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-xl font-semibold tracking-tight">Habitris</h1>
@@ -44,8 +45,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="mx-auto flex min-h-[calc(100vh-8rem)] min-w-0 max-w-6xl flex-col overflow-x-hidden px-4 py-6">
-        <BrowserRouter>
+        <main className="mx-auto flex min-h-[calc(100vh-8rem)] min-w-0 max-w-6xl flex-col overflow-x-hidden px-4 py-6">
           <Routes>
             <Route
               path="/"
@@ -73,21 +73,21 @@ export default function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/about" element={<AboutPage />} />
           </Routes>
-        </BrowserRouter>
-      </main>
+        </main>
 
-      <Footer />
+        <Footer />
 
-      {toast && (
-        <Toast message={toast} onDismiss={() => setToast(null)} />
-      )}
+        {toast && (
+          <Toast message={toast} onDismiss={() => setToast(null)} />
+        )}
 
-      {dataModalOpen && (
-        <DataBackupModal
-          onClose={() => setDataModalOpen(false)}
-          onImportSuccess={() => {}}
-        />
-      )}
-    </div>
+        {dataModalOpen && (
+          <DataBackupModal
+            onClose={() => setDataModalOpen(false)}
+            onImportSuccess={() => {}}
+          />
+        )}
+      </div>
+    </BrowserRouter>
   )
 }
